@@ -376,12 +376,20 @@ function requestListener (details) {
 chrome.webRequest.onHeadersReceived.removeListener(responseListener);
 chrome.webRequest.onBeforeSendHeaders.removeListener(requestListener);
 
+var respExtraInfoSpec = ['blocking', 'responseHeaders'];
+if (window.navigator.userAgent.indexOf("Chrome") >= 0) {
+	respExtraInfoSpec.push("extraHeaders");
+}
 chrome.webRequest.onHeadersReceived.addListener(responseListener, {
 		urls: ["<all_urls>"]
-	}, ['blocking', 'responseHeaders', 'extraHeaders']);
+	}, respExtraInfoSpec);
 
+var reqExtraInfoSpec = ['blocking', 'requestHeaders'];
+if (window.navigator.userAgent.indexOf("Chrome") >= 0) {
+	reqExtraInfoSpec.push("extraHeaders");
+}
 chrome.webRequest.onBeforeSendHeaders.addListener(requestListener, {
 		urls: ["<all_urls>"]
-	}, ['blocking', 'requestHeaders', 'extraHeaders']);
+	}, reqExtraInfoSpec);
 
 
